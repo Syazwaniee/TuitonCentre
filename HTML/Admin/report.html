@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../CSS/login.css">
+    <link rel="stylesheet" href="../CSS/navbar.css">
+    <!-- Add SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+</head> 
+
+<body>
+    <!-- Navbar will be inserted here -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Dropdowns Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Reports</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="departmentSelect" class="form-label">Report Type</label>
+                                <select class="form-select" id="departmentSelect">
+                                    <option value="all" selected>All</option>
+                                    <option value="enrollment">Enrollment Report</option>
+                                    <option value="course">Course Report</option>
+                                    <option value="payment">Payment Report</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="monthSelect" class="form-label">Month</label>
+                                <select class="form-select" id="monthSelect">
+                                    <option value="all" selected>All</option>
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Report</h5>
+                            <div>
+                                <span class="me-2" id="totalRecords">Total Records: 0</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="reportTable">
+                                <thead style="background-color: #e8f4f8;">
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Date</th>
+                                        <th>Student ID</th>
+                                        <th>Report Type</th>
+                                        <th id="courseAmountHeader">Course/Amount</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportTableBody">
+                                    <!-- Data will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination and Export Button -->
+                        <div class="d-flex flex-column align-items-center mt-3">
+                            <nav aria-label="Page navigation" class="mb-3">
+                                <ul class="pagination mb-0" id="pagination">
+                                    <!-- Pagination will be handled by JavaScript -->
+                                </ul>
+                            </nav>
+                            <button class="btn btn-primary">
+                                <i class="bi bi-download me-2"></i>Export Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js for navbar functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Script to load navbar -->
+    <script>
+        // Create a new XMLHttpRequest
+        var xhr = new XMLHttpRequest();
+        
+        // Configure it
+        xhr.open('GET', '../components/navbar.html', true);
+        
+        // Set up what to do when the request is complete
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Insert the navbar HTML into the container
+                document.getElementById('navbar-container').innerHTML = xhr.responseText;
+            }
+        };
+        
+        // Send the request
+        xhr.send();
+    </script>
+
+    <!-- Report Data and Filtering Script -->
+    <script>
+        // Dummy data
+        const reportData = [
+            // Enrollment Reports
+            { 
+                id: 1, 
+                date: '2025-03-15', 
+                type: 'enrollment', 
+                studentId: 'STU001', 
+                courseName: 'Computer Science',
+                description: 'New Student Registration', 
+                amount: 0, 
+                status: 'completed' 
+            },
+            { 
+                id: 2, 
+                date: '2025-03-14', 
+                type: 'enrollment', 
+                studentId: 'STU002', 
+                courseName: 'Business Administration',
+                description: 'New Student Registration', 
+                amount: 0, 
+                status: 'completed' 
+            },
+            { 
+                id: 3, 
+                date: '2025-02-20', 
+                type: 'enrollment', 
+                studentId: 'STU003', 
+                courseName: 'Engineering',
+                description: 'New Student Registration', 
+                amount: 0, 
+                status: 'completed' 
+            },
+            { 
+                id: 4, 
+                date: '2025-02-15', 
+                type: 'enrollment', 
+                studentId: 'STU004', 
+                courseName: 'Arts & Design',
+                description: 'New Student Registration', 
+                amount: 0, 
+                status: 'pending' 
+            },
+            
+            // Course Reports
+            { 
+                id: 5, 
+                date: '2025-03-15', 
+                type: 'course', 
+                studentId: 'STU001', 
+                courseName: 'Web Development',
+                description: 'Course Registration', 
+                amount: 0, 
+                status: 'completed' 
+            },
+            { 
+                id: 6, 
+                date: '2025-03-10', 
+                type: 'course', 
+                studentId: 'STU002', 
+                courseName: 'Database Management',
+                description: 'Course Registration', 
+                amount: 0, 
+                status: 'completed' 
+            },
+            { 
+                id: 7, 
+                date: '2025-02-25', 
+                type: 'course', 
+                studentId: 'STU003', 
+                courseName: 'Mobile App Development',
+                description: 'Course Registration', 
+                amount: 0, 
+                status: 'completed' 
+            },
+            { 
+                id: 8, 
+                date: '2025-02-20', 
+                type: 'course', 
+                studentId: 'STU004', 
+                courseName: 'Cloud Computing',
+                description: 'Course Registration', 
+                amount: 0, 
+                status: 'pending' 
+            },
+            
+            // Payment Reports
+            { 
+                id: 9, 
+                date: '2025-03-15', 
+                type: 'payment', 
+                studentId: 'STU001', 
+                courseName: 'Computer Science',
+                description: 'Tuition Fee Payment', 
+                amount: 400, 
+                status: 'completed' 
+            },
+            { 
+                id: 10, 
+                date: '2025-03-14', 
+                type: 'payment', 
+                studentId: 'STU002', 
+                courseName: 'Business Administration',
+                description: 'Late Fee Payment', 
+                amount: 250, 
+                status: 'completed' 
+            },
+            { 
+                id: 11, 
+                date: '2025-02-28', 
+                type: 'payment', 
+                studentId: 'STU003', 
+                courseName: 'Engineering',
+                description: 'Late Fee Payment', 
+                amount: 500, 
+                status: 'completed' 
+            },
+            { 
+                id: 12, 
+                date: '2025-02-25', 
+                type: 'payment', 
+                studentId: 'STU004', 
+                courseName: 'Arts & Design',
+                description: 'Registration Fee', 
+                amount: 100, 
+                status: 'pending' 
+            }
+        ];
+
+        // Function to format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Function to get month from date
+        function getMonthFromDate(dateString) {
+            return new Date(dateString).getMonth() + 1;
+        }
+
+        // Function to render table rows
+        function renderTable(data) {
+            const tbody = document.getElementById('reportTableBody');
+            const courseAmountHeader = document.getElementById('courseAmountHeader');
+            tbody.innerHTML = '';
+            
+            // Update header text based on selected report type
+            const reportType = document.getElementById('departmentSelect').value;
+            courseAmountHeader.textContent = reportType === 'payment' ? 'Amount (RM)' : 
+                                           reportType === 'all' ? 'Course/Amount' : 
+                                           'Course Name';
+            
+            data.forEach((item, index) => {
+                const cellContent = item.type === 'payment' ? 
+                    `RM ${item.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 
+                    item.courseName;
+                
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${formatDate(item.date)}</td>
+                        <td>${item.studentId}</td>
+                        <td>${item.type.charAt(0).toUpperCase() + item.type.slice(1)} Report</td>
+                        <td>${cellContent}</td>
+                        <td>${item.description}</td>
+                        <td><span class="badge bg-${item.status === 'completed' ? 'success' : 'warning'}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewDetails(${item.id})">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+
+            // Update total records
+            document.getElementById('totalRecords').textContent = `Total Records: ${data.length}`;
+        }
+
+        // Function to filter data
+        function filterData() {
+            const reportType = document.getElementById('departmentSelect').value;
+            const month = document.getElementById('monthSelect').value;
+            
+            let filteredData = [...reportData];
+            
+            // Filter by report type
+            if (reportType && reportType !== 'all') {
+                filteredData = filteredData.filter(item => item.type === reportType);
+            }
+            
+            // Filter by month
+            if (month && month !== 'all') {
+                filteredData = filteredData.filter(item => getMonthFromDate(item.date) === parseInt(month));
+            }
+            
+            renderTable(filteredData);
+        }
+
+        // Function to view details (can be expanded later)
+        function viewDetails(id) {
+            const item = reportData.find(item => item.id === id);
+            const details = [
+                `Student ID: ${item.studentId}`,
+                item.type !== 'payment' ? `Course: ${item.courseName}` : `Amount: RM ${item.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                `Description: ${item.description}`,
+                `Status: ${item.status}`
+            ].filter(Boolean).join('\n');
+            
+            alert(`Viewing details for:\n${details}`);
+        }
+
+        // Add event listeners
+        document.getElementById('departmentSelect').addEventListener('change', filterData);
+        document.getElementById('monthSelect').addEventListener('change', filterData);
+
+        // Initial render
+        renderTable(reportData);
+    </script>
+</body>
+
+</html>

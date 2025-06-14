@@ -1,9 +1,9 @@
 <!-- Navbar Component -->
-<nav class="navbar navbar-expand-lg navbar-dark shadow" style="background-color: #E3F2FD;">
+<nav class="navbar navbar-expand-lg navbar-dark shadow">
     <div class="container-fluid px-4">
         <!-- Logo -->
         <a class="navbar-brand me-5" href="#">
-            <img src="../images/tms.png" alt="Logo" height="40" class="d-inline-block align-text-top">
+            <img src="../../images/tms.png" alt="Logo" height="40" class="d-inline-block align-text-top">
         </a>
         
         <!-- Hamburger menu button for mobile -->
@@ -17,10 +17,10 @@
             <!-- Left side navigation items -->
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Home</a>
+                    <a class="nav-link" href="../HTML/Admin/dashboard.html">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Reports</a>
+                    <a class="nav-link active" href="../HTML/Admin/report.html">Reports</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Profile</a>
@@ -31,7 +31,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../images/profile.png" alt="Profile" class="rounded-circle" 
+                        <img src="../../images/profile.png" alt="Profile" class="rounded-circle" 
                              style="width: 30px; height: 30px; object-fit: cover;">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -43,4 +43,36 @@
             </ul>
         </div>
     </div>
-</nav> 
+</nav>
+
+<script>
+    // Function to set active nav link based on current page
+    function setActiveNavLink() {
+        // Get current page path
+        const currentPath = window.location.pathname;
+        
+        // Get all nav links
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        // Remove active class from all links first
+        navLinks.forEach(link => link.classList.remove('active'));
+        
+        // Find and set active class for current page
+        navLinks.forEach(link => {
+            const linkPath = link.getAttribute('href');
+            // Check if current path includes the link path (for partial matches)
+            // or if it's the home page (empty or just '/')
+            if (currentPath.includes(linkPath) || 
+                (currentPath === '/' && linkPath === '#') ||
+                (currentPath.endsWith('/') && linkPath === '#')) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // Run when the navbar is loaded
+    document.addEventListener('DOMContentLoaded', setActiveNavLink);
+    
+    // Also run when the page changes (for single page applications)
+    window.addEventListener('popstate', setActiveNavLink);
+</script> 
