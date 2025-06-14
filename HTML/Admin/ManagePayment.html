@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Make Payment - Tuition Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .card {
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      border-bottom: none;
+    }
+
+    .card-header h3 {
+      color: #0d6efd;
+      font-weight: 700;
+    }
+
+    .input-group-text {
+      background-color: #f8f9fa !important;
+      border-color: #dee2e6;
+    }
+
+    .form-control {
+      border-color: #dee2e6;
+    }
+
+    .form-control:focus {
+      box-shadow: none;
+      border-color: #0d6efd;
+    }
+
+    .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+      padding: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #0b5ed7;
+      transform: translateY(-2px);
+    }
+
+    .form-check-input:checked {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+
+    .text-primary {
+      color: #0d6efd !important;
+    }
+
+    .text-primary:hover {
+      color: #0b5ed7 !important;
+    }
+
+    .badge {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-5">
+    <div class="card shadow">
+      <div class="card-header text-center">
+        <h3>Make Payment</h3>
+      </div>
+      <div class="card-body">
+        <!-- Tuition Summary -->
+        <div class="row mb-4 text-center">
+          <div class="col-md-4">
+            <h5>Total Fee</h5>
+            <p class="text-primary fw-bold" id="totalFee">RM 950</p>
+          </div>
+          <div class="col-md-4">
+            <h5>Paid</h5>
+            <p class="text-success fw-bold" id="paidAmount">RM 300</p>
+          </div>
+          <div class="col-md-4">
+            <h5>Remaining</h5>
+            <p class="text-danger fw-bold" id="remainingAmount">RM 650</p>
+          </div>
+        </div>
+
+        <!-- Receipt Upload -->
+        <form id="paymentForm">
+          <div class="mb-3">
+            <label for="receiptUpload" class="form-label">Upload Payment Receipt (PDF/Image)</label>
+            <input class="form-control" type="file" id="receiptUpload" accept="application/pdf,image/*" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="amountPaid" class="form-label">Amount Paid</label>
+            <input type="number" class="form-control" id="amountPaid" placeholder="Enter amount paid" required min="1" />
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Submit Payment</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Payment History -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <h5 class="mb-0">Payment History</h5>
+      </div>
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Receipt</th>
+            </tr>
+          </thead>
+          <tbody id="paymentHistory">
+            <!-- Dynamic rows will appear here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Section -->
+  <script>
+    const form = document.getElementById('paymentForm');
+    const historyTable = document.getElementById('paymentHistory');
+    const totalFee = 950;
+    let paidSoFar = 300;
+
+    const updateSummary = () => {
+      document.getElementById('paidAmount').textContent = `RM ${paidSoFar}`;
+      document.getElementById('remainingAmount').textContent = `RM ${totalFee - paidSoFar}`;
+    };
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const amount = parseInt(document.getElementById('amountPaid').value);
+      const file = document.getElementById('receiptUpload').files[0];
+
+      if (!amount || !file) {
+        alert("Please provide both amount and receipt file.");
+        return;
+      }
+
+      paidSoFar += amount;
+      updateSummary();
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        const now = new Date().toLocaleDateString();
+        const newRow = `
+          <tr>
+            <td>${now}</td>
+            <td>RM ${amount}</td>
+            <td><span class="badge bg-warning text-dark">Pending</span></td>
+            <td><a href="${reader.result}" target="_blank">View</a></td>
+          </tr>
+        `;
+        historyTable.insertAdjacentHTML('afterbegin', newRow);
+        form.reset();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    updateSummary();
+  </script>
+</body>
+</html>
