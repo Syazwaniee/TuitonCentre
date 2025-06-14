@@ -137,6 +137,15 @@ body {
 
             // Simulate login process (replace this with your actual authentication logic)
             setTimeout(() => {
+                // Store user info in sessionStorage
+                const userInfo = {
+                    email: email,
+                    role: role,
+                    name: role === 'admin' ? 'Admin User' : 
+                          role === 'teacher' ? 'Teacher User' : 'Student User'
+                };
+                sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+
                 switch(role) {
                     case 'admin':
                         Swal.fire({
@@ -146,7 +155,7 @@ body {
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
-                            window.location.href = 'admin.html';
+                            window.location.href = 'Admin/dashboard.html';
                         });
                         break;
                     case 'teacher':

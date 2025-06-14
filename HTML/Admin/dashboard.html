@@ -1,1 +1,36 @@
-<link rel="stylesheet" href="header.html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Tuition Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../../CSS/navbar.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#navbar-container").load("../components/navbar.html", function() {
+                // Update image paths after navbar is loaded
+                $("#navbar-container img").each(function() {
+                    let src = $(this).attr('src');
+                    if (src.startsWith('../../')) {
+                        $(this).attr('src', src.replace('../../', '../../../'));
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Welcome to the Admin Dashboard</h1>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

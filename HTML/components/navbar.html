@@ -1,5 +1,5 @@
 <!-- Navbar Component -->
-<nav class="navbar navbar-expand-lg navbar-dark shadow">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid px-4">
         <!-- Logo -->
         <a class="navbar-brand me-5" href="#">
@@ -20,7 +20,7 @@
                     <a class="nav-link" href="../HTML/Admin/dashboard.html">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="../HTML/Admin/report.html">Reports</a>
+                    <a class="nav-link" href="../HTML/Admin/report.html">Reports</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Profile</a>
@@ -35,9 +35,10 @@
                              style="width: 30px; height: 30px; object-fit: cover;">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><span class="dropdown-item-text text-muted">Role: Administrator</span></li>
+                        <li><span class="dropdown-item-text text-muted" id="userRole">Loading...</span></li>
+                        <li><span class="dropdown-item-text text-muted" id="userName">Loading...</span></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        <li><a class="dropdown-item" href="../logout.html" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -60,18 +61,36 @@
         // Find and set active class for current page
         navLinks.forEach(link => {
             const linkPath = link.getAttribute('href');
-            // Check if current path includes the link path (for partial matches)
-            // or if it's the home page (empty or just '/')
-            if (currentPath.includes(linkPath) || 
-                (currentPath === '/' && linkPath === '#') ||
-                (currentPath.endsWith('/') && linkPath === '#')) {
+            if (currentPath.includes(linkPath)) {
                 link.classList.add('active');
             }
         });
     }
 
-    // Run when the navbar is loaded
-    document.addEventListener('DOMContentLoaded', setActiveNavLink);
+    // Function to update user information in navbar
+    function updateUserInfo() {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        if (userInfo) {
+            document.getElementById('userRole').textContent = `Role: ${userInfo.role}`;
+            document.getElementById('userName').textContent = `Name: ${userInfo.name}`;
+        } else {
+            // If no user info, redirect to login
+            window.location.href = '../../HTML/login.html';
+        }
+    }
+
+    // Function to handle logout
+    function handleLogout(e) {
+        e.preventDefault(); // Prevent default link behavior
+        window.location.href = '../logout.html';
+    }
+
+    // Add event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        setActiveNavLink();
+        updateUserInfo();
+        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    });
     
     // Also run when the page changes (for single page applications)
     window.addEventListener('popstate', setActiveNavLink);
