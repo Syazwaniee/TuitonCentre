@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register Class</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    table th, table td { vertical-align: middle; }
+    td:first-child { text-align: left; }
+    .pricing-table { font-size: 0.9rem; }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-100 justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="card shadow-lg border-0 rounded-lg">
+          <div class="card-header text-center">
+            <h3>Register for Classes</h3>
+            <p class="text-muted">Please select your form level and subjects</p>
+          </div>
+          <div class="card-body p-4">
+
+            <div class="alert alert-info text-center">
+              <table class="table table-borderless m-0 pricing-table">
+                <tr class="text-center">
+                  <td>1 subject: RM50</td>
+                  <td>2 subjects: RM85</td>
+                  <td>3 subjects: RM110</td>
+                  <td>4 subjects: RM125</td>
+                  <td>5 subjects: RM145</td>
+                  <td>6 subjects: RM157</td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="mb-4 text-center">
+              <label for="formLevel" class="form-label fw-bold">Select Form Level:</label>
+              <select id="formLevel" class="form-select w-auto d-inline-block" required>
+                <option value="">-- Select Form --</option>
+                <option value="Form 1">Form 1</option>
+                <option value="Form 2">Form 2</option>
+                <option value="Form 3">Form 3</option>
+                <option value="Form 4">Form 4</option>
+                <option value="Form 5">Form 5</option>
+              </select>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+              <div class="card-header">
+                <h5 class="mb-0">Class Timetable</h5>
+              </div>
+              <div class="card-body">
+                <form id="subjectForm">
+                  <table class="table table-bordered align-middle text-center">
+                    <thead class="table-light">
+                      <tr>
+                        <th class="text-start">Subject</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Select</th>
+                      </tr>
+                    </thead>
+                    <tbody id="timetableBody"></tbody>
+                  </table>
+                </form>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <h5>Total Price: <span id="priceDisplay">RM0</span></h5>
+              <button class="btn btn-primary" id="submitBtn">Submit</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sessions = [
+      { subject: "Bahasa Melayu", day: "Monday", time: "2:00 PM - 4:00 PM" },
+      { subject: "Bahasa Melayu", day: "Friday", time: "4:00 PM - 6:00 PM" },
+      { subject: "English", day: "Tuesday", time: "4:00 PM - 6:00 PM" },
+      { subject: "English", day: "Thursday", time: "3:00 PM - 5:00 PM" },
+      { subject: "Science", day: "Wednesday", time: "6:00 PM - 8:00 PM" },
+      { subject: "Science", day: "Wednesday", time: "5:00 PM - 7:00 PM" },
+      { subject: "Mathematics", day: "Monday", time: "3:00 PM - 5:00 PM" },
+      { subject: "Mathematics", day: "Thursday", time: "2:00 PM - 4:00 PM" },
+      { subject: "Geography", day: "Tuesday", time: "5:00 PM - 7:00 PM" },
+      { subject: "Geography", day: "Friday", time: "4:00 PM - 6:00 PM" },
+      { subject: "History", day: "Wednesday", time: "5:00 PM - 7:00 PM" },
+      { subject: "History", day: "Friday", time: "6:00 PM - 8:00 PM" },
+    ];
+
+    const pricing = {
+      1: 50, 2: 85, 3: 110, 4: 125, 5: 145, 6: 157
+    };
+
+    const tbody = document.getElementById("timetableBody");
+
+    function parseTimeRange(timeStr) {
+      const [startStr, endStr] = timeStr.replace(/\s/g, '').split('-');
+      const [sHour, sMin, sAmpm] = startStr.match(/(\d+):(\d+)(AM|PM)/i).slice(1);
+      const [eHour, eMin, eAmpm] = endStr.match(/(\d+):(\d+)(AM|PM)/i).slice(1);
+      const to24 = (h, m, a) => (parseInt(h) % 12 + (a.toUpperCase() === "PM" ? 12 : 0)) * 60 + parseInt(m);
+      return [to24(sHour, sMin, sAmpm), to24(eHour, eMin, eAmpm)];
+    }
+
+    function overlaps(a, b) {
+      return a[0] < b[1] && b[0] < a[1];
+    }
+
+    function renderTimetable() {
+      tbody.innerHTML = '';
+      sessions.forEach((session, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="text-start">${session.subject}</td>
+          <td>${session.day}</td>
+          <td>${session.time}</td>
+          <td><input type="checkbox" class="form-check-input session-check" 
+            data-subject="${session.subject}" data-day="${session.day}" 
+            data-time="${session.time}" data-index="${i}"></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      attachCheckboxListeners();
+    }
+
+    function updatePrice() {
+      const selectedSubjects = new Set();
+      document.querySelectorAll(".session-check:checked").forEach(cb => {
+        selectedSubjects.add(cb.dataset.subject);
+      });
+      const count = selectedSubjects.size;
+      const price = pricing[count] || 0;
+      document.getElementById("priceDisplay").textContent = `RM${price}`;
+    }
+
+    function saveSelectionsToLocalStorage() {
+      const selected = Array.from(document.querySelectorAll(".session-check:checked")).map(cb => ({
+        subject: cb.dataset.subject,
+        day: cb.dataset.day,
+        time: cb.dataset.time
+      }));
+      const form = document.getElementById("formLevel").value;
+      localStorage.setItem("classSelections", JSON.stringify({ form, selected }));
+    }
+
+    function attachCheckboxListeners() {
+      document.querySelectorAll(".session-check").forEach(cb => {
+        cb.addEventListener("change", function () {
+          const selectedForm = document.getElementById("formLevel").value;
+          const timeRange = parseTimeRange(this.dataset.time);
+
+          if ((selectedForm === "Form 1" || selectedForm === "Form 2") &&
+              (timeRange[0] < 480 || (timeRange[0] >= 660 && timeRange[0] < 840))) {
+            alert("For Form 1-2, classes must be between 8:00 AM–11:00 AM or 2:00 PM–10:00 PM.");
+            this.checked = false;
+            return;
+          }
+
+          if (this.checked) {
+            document.querySelectorAll(`.session-check[data-subject="${this.dataset.subject}"]`).forEach(other => {
+              if (other !== this) other.checked = false;
+            });
+
+            const currentRange = parseTimeRange(this.dataset.time);
+            const conflict = Array.from(document.querySelectorAll(".session-check:checked")).some(other => {
+              return other !== this && this.dataset.day === other.dataset.day &&
+                overlaps(currentRange, parseTimeRange(other.dataset.time));
+            });
+
+            if (conflict) {
+              alert("This session time clashes with another selected subject.");
+              this.checked = false;
+              return;
+            }
+
+            const selectedSubjects = new Set();
+            document.querySelectorAll(".session-check:checked").forEach(cb => {
+              selectedSubjects.add(cb.dataset.subject);
+            });
+
+            if (selectedSubjects.size > 6) {
+              alert("You can select a maximum of 6 subjects.");
+              this.checked = false;
+              return;
+            }
+          }
+
+          updatePrice();
+        });
+      });
+    }
+
+    document.getElementById("submitBtn").addEventListener("click", function () {
+      const selectedSubjects = new Set();
+      const formLevel = document.getElementById("formLevel").value;
+
+      if (!formLevel) {
+        alert("You must select a Form level before submitting.");
+        return;
+      }
+
+      document.querySelectorAll(".session-check:checked").forEach(cb => {
+        selectedSubjects.add(cb.dataset.subject);
+      });
+
+      if (selectedSubjects.size < 1) {
+        alert("You must select at least one subject to proceed.");
+        return;
+      }
+
+      const confirmed = confirm("Are you sure you want to submit your selections?");
+      if (confirmed) {
+        saveSelectionsToLocalStorage();
+        alert("Your selections have been saved successfully.");
+      }
+    });
+
+    renderTimetable();
+  </script>
+</body>
+</html>
