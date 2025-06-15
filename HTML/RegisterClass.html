@@ -160,25 +160,10 @@
       });
     }
 
-    document.getElementById("submitBtn").addEventListener("click", function () {
-      const selectedSubjects = new Set();
-      const formLevel = document.getElementById("formLevel").value;
-
-      if (!formLevel) {
-        alert("You must select a Form level before submitting.");
-        return;
-      }
-
-      document.querySelectorAll(".session-check:checked").forEach(cb => {
-        selectedSubjects.add(cb.dataset.subject);
-      });
-
-      if (selectedSubjects.size < 1) {
-        alert("You must select at least one subject to proceed.");
-        return;
-      }
-
-      alert("Your selections have been saved successfully.");
+    // 🔴 Disable submit functionality (button does nothing)
+    document.getElementById("submitBtn").addEventListener("click", function (e) {
+      e.preventDefault(); // prevents any action
+      // You can optionally show a message like: console.log("Submit button clicked, but no action taken.");
     });
 
     document.getElementById("timetableSelect").addEventListener("change", function () {
