@@ -18,7 +18,7 @@
         <div class="card shadow-lg border-0 rounded-lg">
           <div class="card-header text-center">
             <h3>Register for Classes</h3>
-            <p class="text-muted">Please select your form level and subjects</p>
+            <p class="text-muted">Please select your form level, timetable and subjects</p>
           </div>
           <div class="card-body p-4">
 
@@ -35,7 +35,7 @@
               </table>
             </div>
 
-            <div class="mb-4 text-center">
+            <div class="mb-3 text-center">
               <label for="formLevel" class="form-label fw-bold">Select Form Level:</label>
               <select id="formLevel" class="form-select w-auto d-inline-block" required>
                 <option value="">-- Select Form --</option>
@@ -44,6 +44,14 @@
                 <option value="Form 3">Form 3</option>
                 <option value="Form 4">Form 4</option>
                 <option value="Form 5">Form 5</option>
+              </select>
+            </div>
+
+            <div class="mb-4 text-center">
+              <label for="timetableSelect" class="form-label fw-bold">Choose Timetable:</label>
+              <select id="timetableSelect" class="form-select w-auto d-inline-block">
+                <option value="1">Timetable 1</option>
+                <option value="2">Timetable 2</option>
               </select>
             </div>
 
@@ -80,19 +88,22 @@
   </div>
 
   <script>
-    const sessions = [
-      { subject: "Bahasa Melayu", day: "Monday", time: "2:00 PM - 4:00 PM" },
-      { subject: "Bahasa Melayu", day: "Friday", time: "4:00 PM - 6:00 PM" },
-      { subject: "English", day: "Tuesday", time: "4:00 PM - 6:00 PM" },
-      { subject: "English", day: "Thursday", time: "3:00 PM - 5:00 PM" },
-      { subject: "Science", day: "Wednesday", time: "6:00 PM - 8:00 PM" },
-      { subject: "Science", day: "Wednesday", time: "5:00 PM - 7:00 PM" },
-      { subject: "Mathematics", day: "Monday", time: "3:00 PM - 5:00 PM" },
-      { subject: "Mathematics", day: "Thursday", time: "2:00 PM - 4:00 PM" },
-      { subject: "Geography", day: "Tuesday", time: "5:00 PM - 7:00 PM" },
-      { subject: "Geography", day: "Friday", time: "4:00 PM - 6:00 PM" },
-      { subject: "History", day: "Wednesday", time: "5:00 PM - 7:00 PM" },
-      { subject: "History", day: "Friday", time: "6:00 PM - 8:00 PM" },
+    const timetable1 = [
+      { subject: "Bahasa Melayu", day: "Sunday", time: "8:00 PM - 10:00 PM" },
+      { subject: "English", day: "Monday", time: "8:00 PM - 10:00 PM" },
+      { subject: "Science", day: "Tuesday", time: "8:00 PM - 10:00 PM" },
+      { subject: "Mathematics", day: "Wednesday", time: "8:00 PM - 10:00 PM" },
+      { subject: "Geography", day: "Thursday", time: "8:00 PM - 10:00 PM" },
+      { subject: "History", day: "Friday", time: "8:00 PM - 10:00 PM" },
+    ];
+
+    const timetable2 = [
+      { subject: "Bahasa Melayu", day: "Monday", time: "8:00 PM - 10:00 PM" },
+      { subject: "English", day: "Tuesday", time: "8:00 PM - 10:00 PM" },
+      { subject: "Science", day: "Wednesday", time: "8:00 PM - 10:00 PM" },
+      { subject: "Mathematics", day: "Thursday", time: "8:00 PM - 10:00 PM" },
+      { subject: "Geography", day: "Friday", time: "8:00 PM - 10:00 PM" },
+      { subject: "History", day: "Sunday", time: "8:00 PM - 10:00 PM" },
     ];
 
     const pricing = {
@@ -101,19 +112,7 @@
 
     const tbody = document.getElementById("timetableBody");
 
-    function parseTimeRange(timeStr) {
-      const [startStr, endStr] = timeStr.replace(/\s/g, '').split('-');
-      const [sHour, sMin, sAmpm] = startStr.match(/(\d+):(\d+)(AM|PM)/i).slice(1);
-      const [eHour, eMin, eAmpm] = endStr.match(/(\d+):(\d+)(AM|PM)/i).slice(1);
-      const to24 = (h, m, a) => (parseInt(h) % 12 + (a.toUpperCase() === "PM" ? 12 : 0)) * 60 + parseInt(m);
-      return [to24(sHour, sMin, sAmpm), to24(eHour, eMin, eAmpm)];
-    }
-
-    function overlaps(a, b) {
-      return a[0] < b[1] && b[0] < a[1];
-    }
-
-    function renderTimetable() {
+    function renderTimetable(sessions) {
       tbody.innerHTML = '';
       sessions.forEach((session, i) => {
         const tr = document.createElement("tr");
@@ -140,46 +139,10 @@
       document.getElementById("priceDisplay").textContent = `RM${price}`;
     }
 
-    function saveSelectionsToLocalStorage() {
-      const selected = Array.from(document.querySelectorAll(".session-check:checked")).map(cb => ({
-        subject: cb.dataset.subject,
-        day: cb.dataset.day,
-        time: cb.dataset.time
-      }));
-      const form = document.getElementById("formLevel").value;
-      localStorage.setItem("classSelections", JSON.stringify({ form, selected }));
-    }
-
     function attachCheckboxListeners() {
       document.querySelectorAll(".session-check").forEach(cb => {
         cb.addEventListener("change", function () {
-          const selectedForm = document.getElementById("formLevel").value;
-          const timeRange = parseTimeRange(this.dataset.time);
-
-          if ((selectedForm === "Form 1" || selectedForm === "Form 2") &&
-              (timeRange[0] < 480 || (timeRange[0] >= 660 && timeRange[0] < 840))) {
-            alert("For Form 1-2, classes must be between 8:00 AM–11:00 AM or 2:00 PM–10:00 PM.");
-            this.checked = false;
-            return;
-          }
-
           if (this.checked) {
-            document.querySelectorAll(`.session-check[data-subject="${this.dataset.subject}"]`).forEach(other => {
-              if (other !== this) other.checked = false;
-            });
-
-            const currentRange = parseTimeRange(this.dataset.time);
-            const conflict = Array.from(document.querySelectorAll(".session-check:checked")).some(other => {
-              return other !== this && this.dataset.day === other.dataset.day &&
-                overlaps(currentRange, parseTimeRange(other.dataset.time));
-            });
-
-            if (conflict) {
-              alert("This session time clashes with another selected subject.");
-              this.checked = false;
-              return;
-            }
-
             const selectedSubjects = new Set();
             document.querySelectorAll(".session-check:checked").forEach(cb => {
               selectedSubjects.add(cb.dataset.subject);
@@ -215,14 +178,20 @@
         return;
       }
 
-      const confirmed = confirm("Are you sure you want to submit your selections?");
-      if (confirmed) {
-        saveSelectionsToLocalStorage();
-        alert("Your selections have been saved successfully.");
+      alert("Your selections have been saved successfully.");
+    });
+
+    document.getElementById("timetableSelect").addEventListener("change", function () {
+      const selectedTimetable = parseInt(this.value);
+      if (selectedTimetable === 1) {
+        renderTimetable(timetable1);
+      } else {
+        renderTimetable(timetable2);
       }
     });
 
-    renderTimetable();
+    // Initial render
+    renderTimetable(timetable1);
   </script>
 </body>
 </html>
