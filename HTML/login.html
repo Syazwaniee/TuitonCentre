@@ -12,29 +12,37 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
 </head>
 <style>
-.login-container {
-    background-color: rgba(255, 255, 255, 0.5); /* 50% opacity white */
-    border-radius: 10px;
-    margin: 0 20px 20px 20px; /* 20px on left, right and bottom */
-    padding: 30px;
-    width: 100%;
-    max-width: 500px; /* Larger container width */
-}
-.logo-container {
-    text-align: center;
-    margin-bottom: 15px;
-}
-.logo {
-    max-width: 100px; /* Smaller logo */
-    height: auto;
-    margin-bottom: 10px;
-}
-body {
-   
-    background-size: cover;
-    background-position: center;
-}
+    .login-container {
+        background-color: rgba(255, 255, 255, 0.5);
+        /* 50% opacity white */
+        border-radius: 10px;
+        margin: 0 20px 20px 20px;
+        /* 20px on left, right and bottom */
+        padding: 30px;
+        width: 100%;
+        max-width: 500px;
+        /* Larger container width */
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .logo {
+        max-width: 100px;
+        /* Smaller logo */
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    body {
+
+        background-size: cover;
+        background-position: center;
+    }
 </style>
+
 <body>
     <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
         <div class="d-flex flex-column align-items-center">
@@ -42,7 +50,7 @@ body {
             <div class="logo-container">
                 <img src="../images/tms.png" alt="Logo" class="logo">
             </div>
-            
+
             <!-- Larger semi-transparent container -->
             <div class="login-container shadow-lg">
                 <div class="card border-0 bg-transparent">
@@ -87,14 +95,16 @@ body {
                                     <input type="checkbox" class="form-check-input" id="rememberMe">
                                     <label class="form-check-label text-muted" for="rememberMe">Remember me</label>
                                 </div>
-                               <!-- <a href="#" class="text-primary">Forgot password?</a> -->
+                                <!-- <a href="#" class="text-primary">Forgot password?</a> -->
                             </div>
                             <div class="d-grid">
-                                <button type="button" class="btn btn-primary btn-lg" onclick="handleLogin()"><b>Sign In</b></button>
+                                <button type="button" class="btn btn-primary btn-lg" onclick="handleLogin()"><b>Sign
+                                        In</b></button>
                             </div>
                         </form>
                         <div class="text-center mt-4">
-                            <p class="text-muted">Don't have an account? <a href="signup.html" class="text-primary">Sign Up</a>
+                            <p class="text-muted">Don't have an account? <a href="signup.html" class="text-primary">Sign
+                                    Up</a>
                             </p>
                         </div>
                     </div>
@@ -141,12 +151,12 @@ body {
                 const userInfo = {
                     email: email,
                     role: role,
-                    name: role === 'admin' ? 'Admin User' : 
-                          role === 'teacher' ? 'Teacher User' : 'Student User'
+                    name: role === 'admin' ? 'Admin User' :
+                        role === 'teacher' ? 'Teacher User' : 'Student User'
                 };
                 sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
 
-                switch(role) {
+                switch (role) {
                     case 'admin':
                         Swal.fire({
                             icon: 'success',
@@ -177,7 +187,7 @@ body {
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
-                            window.location.href = 'student.html';
+                            window.location.href = 'studentDashboard.html';
                         });
                         break;
                     default:
