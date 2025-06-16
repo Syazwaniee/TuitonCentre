@@ -92,6 +92,7 @@
 
     const tbody = document.getElementById("timetableBody");
     const priceDisplay = document.getElementById("priceDisplay");
+    const timetableSelect = document.getElementById("timetableSelect");
 
     function renderTimetable(sessions) {
       tbody.innerHTML = '';
@@ -106,7 +107,10 @@
       });
     }
 
-    document.getElementById("timetableSelect").addEventListener("change", function () {
+    // Initial load with default timetable
+    renderTimetable(timetable1);
+
+    timetableSelect.addEventListener("change", function () {
       const selectedTimetable = parseInt(this.value);
       renderTimetable(selectedTimetable === 1 ? timetable1 : timetable2);
       priceDisplay.textContent = `RM${timetablePrices[selectedTimetable]}`;
@@ -114,11 +118,25 @@
 
     document.getElementById("submitBtn").addEventListener("click", function (e) {
       e.preventDefault();
-      alert("Your registration has been submitted.");
-    });
 
-    // Initial load
-    renderTimetable(timetable1);
+      const formLevel = document.getElementById("formLevel").value;
+      const timetable = timetableSelect.value;
+      const price = timetablePrices[timetable];
+
+      if (!formLevel || !timetable) {
+        alert("Please select both form level and timetable.");
+        return;
+      }
+
+      // Store in localStorage
+      localStorage.setItem("formLevel", formLevel);
+      localStorage.setItem("timetable", timetable);
+      localStorage.setItem("price", price);
+
+      // Show success popup then redirect
+      alert("The class timetable has been successfully sent to the student's registered email address.");
+      window.location.href = "login.html";
+    });
   </script>
 </body>
 </html>
