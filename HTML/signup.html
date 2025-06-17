@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,19 +89,13 @@
 
   <script>
     function redirectToRegister(event) {
-      event.preventDefault(); // Prevent form from submitting by default
+      event.preventDefault(); // prevent form reload
+      // Optional: Add form validation or save logic here
 
-      const email = document.getElementById("email").value.trim();
-      const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-
-      if (!emailPattern.test(email)) {
-        alert("Please enter a valid email address to proceed with account creation.");
-        return;
-      }
-
-      // Redirect if email is valid
-      window.location.href = "RegisterClass.html";
+      window.location.href = "RegisterClass.html"; // redirect to registration page
     }
   </script>
 </body>
+
 </html>
+
