@@ -11,18 +11,17 @@
 </head>
 
 <body>
-  <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
     <div class="row w-100 justify-content-center">
       <div class="col-md-5 col-lg-4">
         <div class="card shadow-lg border-0 rounded-lg">
-          <div class="card-header">
-            <h3 class="text-center">Create Account</h3>
+          <div class="card-header" style="background-color: #E0EDF8;">
+            <h3 class="text-center">Registration</h3>
             <p class="text-center text-muted">Please fill in your details</p>
           </div>
           <div class="card-body p-4">
             <form onsubmit="redirectToRegister(event)">
               <div class="mb-4">
-                <label for="fullName" class="form-label text-muted">Full Name</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-person"></i></span>
                   <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
@@ -30,7 +29,6 @@
               </div>
 
               <div class="mb-4">
-                <label for="email" class="form-label text-muted">Email address</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                   <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
@@ -38,15 +36,29 @@
               </div>
 
               <div class="mb-4">
-                <label for="phone" class="form-label text-muted">Phone Number</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-telephone"></i></span>
                   <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
                 </div>
               </div>
 
+            
+
               <div class="mb-4">
-                <label for="gender" class="form-label text-muted">Gender</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                  <input type="password" class="form-control" id="password" placeholder="Create a password" required>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                  <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+              </div>
+
+              <div class="mb-4">
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
                   <select class="form-select" id="gender" required>
@@ -55,26 +67,10 @@
                     <option value="male">Male</option>
                   </select>
                 </div>
+                
               </div>
-
-              <div class="mb-4">
-                <label for="password" class="form-label text-muted">Password</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                  <input type="password" class="form-control" id="password" placeholder="Create a password" required>
-                </div>
-              </div>
-
-              <div class="mb-4">
-                <label for="confirmPassword" class="form-label text-muted">Confirm Password</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                  <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
-                </div>
-              </div>
-
               <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
+                <button type="submit" class="btn btn-primary btn-lg">Register</button>
               </div>
             </form>
 
