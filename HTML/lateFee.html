@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Apply Late Fee Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        .btn-apply {
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            font-weight: 600;
+        }
+
+        .btn-apply:hover {
+            background-color: #c82333;
+        }
+
+        .section-title {
+            margin-top: 2rem;
+            color: #0d6efd;
+            font-weight: 600;
+        }
+
+        .overdue-row {
+            background-color: #fff5f5;
+        }
+
+        .progress-bar {
+            background-color: #198754;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-5">
+        <div class="text-center mb-4">
+            <h2>Apply Late Fees</h2>
+            <p class="text-muted"></p>
+        </div>
+
+        <div id="feedback" class="mb-3"></div>
+
+        <h4 class="section-title">🔴 Students With Overdue Payments</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle" id="overdueTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Email</th>
+                        <th>Paid Amount</th>
+                        <th>Outstanding</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <h4 class="section-title">🟢 Students Who Paid On Time</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle" id="paidTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Email</th>
+                        <th>Paid Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const tuitionFee = 950;
+        const lateFee = 50;
+
+        const overdueStudents = [
+            { email: "nurul@example.com", paid: 600 },
+            { email: "rahman@example.com", paid: 750 },
+            { email: "wani@example.com", paid: 500 },
+        ];
+
+        const paidStudents = [
+            { email: "ahmad@example.com", paid: 950 },
+            { email: "eric@example.com", paid: 1000 },
+        ];
+
+        const renderTables = () => {
+            const overdueBody = document.querySelector("#overdueTable tbody");
+            const paidBody = document.querySelector("#paidTable tbody");
+
+            overdueBody.innerHTML = "";
+            paidBody.innerHTML = "";
+
+            overdueStudents.forEach((student, index) => {
+                const outstanding = tuitionFee - student.paid;
+                const paidPercent = Math.round((student.paid / tuitionFee) * 100);
+                const tr = document.createElement("tr");
+                tr.className = "overdue-row";
+                tr.innerHTML = `
+          <td>${student.email}</td>
+          <td>
+            RM${student.paid}
+            <div class="progress mt-1" style="height: 5px;">
+              <div class="progress-bar" style="width: ${paidPercent}%;"></div>
+            </div>
+          </td>
+          <td><span class="text-danger fw-bold">RM${outstanding}</span></td>
+          <td><span class="badge text-bg-danger">Overdue</span></td>
+          <td>
+            <button class="btn btn-apply btn-sm" title="Apply RM50 Fee" onclick="applyLateFee(${index})">
+              <i class="bi bi-cash-coin"></i> Apply Late Fee
+            </button>
+          </td>
+        `;
+                overdueBody.appendChild(tr);
+            });
+
+            paidStudents.forEach(student => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+          <td>${student.email}</td>
+          <td>RM${student.paid}</td>
+          <td><span class="badge text-bg-success">Paid</span></td>
+        `;
+                paidBody.appendChild(tr);
+            });
+        };
+
+        const applyLateFee = (index) => {
+            const student = overdueStudents[index];
+            const newOutstanding = tuitionFee - student.paid + lateFee;
+
+            const feedback = document.getElementById("feedback");
+            feedback.innerHTML = `
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Success:</strong> RM${lateFee} late fee applied to <strong>${student.email}</strong>.
+          New outstanding balance: <strong>RM${newOutstanding}</strong>.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
+
+            document.querySelectorAll("#overdueTable .btn-apply")[index].disabled = true;
+            document.querySelectorAll("#overdueTable .btn-apply")[index].innerHTML = <i class="bi bi-check-circle-fill"></i> Fee Applied;
+        };
+
+        renderTables();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
