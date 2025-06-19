@@ -73,6 +73,69 @@
                                     </button>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>Science 101</td>
+                                <td>Science</td>
+                                <td>Tue, Thu 3:00 PM</td>
+                                <td>10/20</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#editClassModal">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                        data-bs-target="#assignStudentsModal">
+                                        <i class="bi bi-people"></i> Assign
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#deleteClassModal">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>English 101</td>
+                                <td>English</td>
+                                <td>Wed, Fri 4:00 PM</td>
+                                <td>10/20</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#editClassModal">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                        data-bs-target="#assignStudentsModal">
+                                        <i class="bi bi-people"></i> Assign
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#deleteClassModal">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>History 101</td>
+                                <td>History</td>
+                                <td>Tue, Thu 5:00 PM</td>
+                                <td>10/20</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#editClassModal">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                        data-bs-target="#assignStudentsModal">
+                                        <i class="bi bi-people"></i> Assign
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#deleteClassModal">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -168,21 +231,21 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Assign Students</h5>
+                    <h5 class="modal-title">Assign Teacher</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <input type="text" class="form-control" placeholder="Search students...">
+                        <input type="text" class="form-control" placeholder="Search teacher...">
                     </div>
                     <div class="student-list">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="student1">
-                            <label class="form-check-label" for="student1">John Doe</label>
+                            <label class="form-check-label" for="student1">Dr. Robert Brown</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="student2">
-                            <label class="form-check-label" for="student2">Jane Smith</label>
+                            <label class="form-check-label" for="student2">Prof. Emily Davis</label>
                         </div>
                     </div>
                 </div>
