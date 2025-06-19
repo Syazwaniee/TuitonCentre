@@ -40,7 +40,8 @@
     <div class="container my-5">
         <div class="text-center mb-4">
             <h2>Apply Late Fees</h2>
-            <p class="text-muted"></p>
+            <p class="text-muted">This page allows you to apply late fees to students with overdue tuition payments.
+                Click <b>Apply Late Fee</b> to add a RM50 penalty to the outstanding balance.</p>
         </div>
 
         <div id="feedback" class="mb-3"></div>
@@ -77,6 +78,9 @@
     </div>
 
     <script>
+        // Help: This page lists students with overdue tuition payments and allows the admin to apply a late fee (RM50) to each. 
+        // Click "Apply Late Fee" to add the penalty. The button will be disabled after applying.
+
         const tuitionFee = 950;
         const lateFee = 50;
 
@@ -133,6 +137,7 @@
             });
         };
 
+        // Help: When you click "Apply Late Fee", a success message appears and the button is disabled.
         const applyLateFee = (index) => {
             const student = overdueStudents[index];
             const newOutstanding = tuitionFee - student.paid + lateFee;
@@ -146,8 +151,10 @@
         </div>
       `;
 
-            document.querySelectorAll("#overdueTable .btn-apply")[index].disabled = true;
-            document.querySelectorAll("#overdueTable .btn-apply")[index].innerHTML = <i class="bi bi-check-circle-fill"></i> Fee Applied;
+            // Disable the button and show "Fee Applied" with a check icon
+            const btn = document.querySelectorAll("#overdueTable .btn-apply")[index];
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Fee Applied';
         };
 
         renderTables();
